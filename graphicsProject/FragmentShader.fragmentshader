@@ -1,0 +1,18 @@
+
+#version 330 core
+
+// Ouput data
+//in vec3 theColor;
+//out vec3 color;
+
+uniform sampler2D myTextureSampler; // dh elly hy2t3 elgoz2 mn elsora elknera (a5er goz2 m3mlo bind)
+in vec2 TexCoord;
+out vec4 outtex;  // shayla el goz2 elm2to3 mn el sora elkbera elly htzhar 3l screen
+
+void main()
+{
+
+	outtex = texture(myTextureSampler, TexCoord);
+	//color = theColor;
+
+}
