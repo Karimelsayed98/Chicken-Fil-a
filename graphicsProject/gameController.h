@@ -10,6 +10,7 @@
 #include "BossChicken.h"
 #include "Cube.h"
 #include "SpaceFloor.h"
+#include "Ship.h"
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -27,8 +28,8 @@ class gameController
 	BossChicken* bossChicken;
 	Cube* c;
 	SpaceFloor * spaceFloor;
-	//ship * Ship;
-	//vector <normalChicken> chickens;
+	Ship * ship;
+	vector <NormalChicken * > normalChickens;
 	//vector <bossChicken> bosses;
 	//vector <bullet> bullets;
 	//vector <egg> eggs;
@@ -39,6 +40,8 @@ public:
 	void detectCollisions();
 	void HandleKeyboardInput(int key);
 	void cameraVP();
+
+	bool thereIsCollision(Object * a, Object * b);
 
 	void Cleanup();
 	gameController();

@@ -34,10 +34,22 @@ protected:
 	glm::vec3 ambientLight;
 	glm::vec3 lightPosition;
 public:
+	bool Died;
+
+	GLfloat sizeX;
+	GLfloat sizeY;
+	GLfloat sizeZ;
+
+	GLfloat posX;
+	GLfloat posY;
+	GLfloat posZ;
+
 	lowp_mat4 translateVector;
 	lowp_mat4 scaleVector;
 	lowp_mat4 rotationVector;
 	void rotateTheObject(float, int, int, int);
+	void scaleTheObject(float , float , float );
+	void translateTheObject(float , float , float );
 	Object();
 	void init();
 	void draw(GLuint);
