@@ -8,12 +8,9 @@ void Object::rotateTheObject(float angle , int x, int y, int z)
 void Object::scaleTheObject(float x , float y , float z )
 {
 
-	sizeX = x* (abs(verts[0].pos.x - verts[3].pos.x) / 2.0);
-	sizeY = y* (abs(verts[0].pos.y - verts[3].pos.y) / 2.0);
-	sizeZ = z* (abs(verts[0].pos.z - verts[3].pos.z) / 2.0);
-	posX *= sizeX ;
-	posY *= sizeY ;
-	posZ *= sizeZ ;
+	sizeX *= x;//* (abs(verts[0].pos.x - verts[3].pos.x) / 2.0);
+	sizeY *= y;// *(abs(verts[0].pos.y - verts[3].pos.y) / 2.0);
+	sizeZ *= z;//* (abs(verts[0].pos.z - verts[3].pos.z) / 2.0);
 	this->scaleVector *= scale(x, y, z);
 }
 
@@ -24,7 +21,7 @@ void Object::translateTheObject(float x, float y , float z)
 	posY = translateVector[3].y;
 	posZ = translateVector[3].z;
 	//vec4 trans = this->translateVector*vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	cout << posX << ' ' << posY << ' ' << posZ << endl;
+	//cout << posX << ' ' << posY << ' ' << posZ << endl;
 }
 
 Object::Object()

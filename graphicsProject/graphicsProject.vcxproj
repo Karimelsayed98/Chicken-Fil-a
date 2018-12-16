@@ -133,6 +133,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="ShipBullet.cpp" />
     <ClCompile Include="SpaceFloor.cpp" />
     <ClCompile Include="stb_image.c" />
     <ClCompile Include="texture.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="shader.hpp" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="ShipBullet.h" />
     <ClInclude Include="SpaceFloor.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="texture.h" />

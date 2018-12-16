@@ -72,6 +72,7 @@ bool InitGraphics()
 		if (KeyPressed != -1)
 		{
 			renderer->HandleKeyboardInput(KeyPressed);
+			renderer->HandleMouseInput(KeyPressed);
 			//KeyPressed = -1;
 		}
 

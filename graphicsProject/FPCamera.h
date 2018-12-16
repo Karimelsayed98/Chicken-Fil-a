@@ -19,7 +19,7 @@ class FPCamera
 public:
 	FPCamera(void);
 	~FPCamera(void);
-
+	bool HandleKeyboardInput(int);
 	void UpdateViewMatrix();
 	glm::mat4 GetViewMatrix();
 	void SetPerspectiveProjection(float FOV, float aspectRatio, float near, float far);

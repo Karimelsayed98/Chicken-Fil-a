@@ -14,7 +14,7 @@
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-
+#include "ShipBullet.h"
 class gameController
 {
 	GLuint programID;
@@ -30,15 +30,27 @@ class gameController
 	SpaceFloor * spaceFloor;
 	Ship * ship;
 	vector <NormalChicken * > normalChickens;
+	vector <ShipBullet * > ShipBullets;
+	GLfloat pastFrame;
+	GLfloat deltaTime;
+
 	//vector <bossChicken> bosses;
 	//vector <bullet> bullets;
 	//vector <egg> eggs;
 public:
 	void init();
 	void draw();
+	void drawBullets();
+	void drawChickens();
 	void update();
-	void detectCollisions();
+	void updateShoots();
+	void updateChicken();
+	void updateShip();
+	void checkForAllCollisions();
+	void CollisionBetweenBulletAndChickens();
+	void CollisionBetweenShipAndChickens();
 	void HandleKeyboardInput(int key);
+	void HandleMouseInput(int key);
 	void cameraVP();
 
 	bool thereIsCollision(Object * a, Object * b);
