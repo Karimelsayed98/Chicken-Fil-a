@@ -11,8 +11,8 @@ Ship::Ship(string textureName) : Rect(textureName)
 	this->rotateTheObject(-70.0f, 1, 0, 0);
 	//cout << sizeX << ' ' << sizeY << ' ' << sizeZ << endl;
 	//this->scaleVector *= scale(vec3(0.5f, 0.5f, 0.5f));
+	//translateTheObject(-0.5f, -0.0f, -0.0f);
 	scaleTheObject(0.5f, 0.5f, 0.5f);
-	translateTheObject(-0.5f, -0.0f, -0.0f);
 	//cout << sizeX << ' ' << sizeY << ' ' << sizeZ << endl;
 	
 }

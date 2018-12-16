@@ -22,12 +22,15 @@ void gameController::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
+	for (float i = -1.0f; i <= 1.0f; i += 0.6f)
+	{
+		normalChicken = new NormalChicken("chicken2.png");
+		normalChicken->translateTheObject(i, 0.42, -1.0);
+		normalChickens.push_back(normalChicken);
 
+	}
 	normalChicken = new NormalChicken ("chicken2.png");
 	normalChickens.push_back(normalChicken);
-	//normalChicken = new NormalChicken("chicken2.png");
-	//normalChicken->translateTheObject(-0.25f, 0, 0);
-	//normalChickens.push_back(normalChicken);
 	//bossChicken = new BossChicken ("Bosschicken2.png");
 	ship = new Ship("ship.png");
 	//c = new Cube("Bosschicken2.png");
@@ -147,13 +150,15 @@ bool gameController::thereIsCollision(Object * a, Object * b)
 	bool col = sqrt(dx + dz + dy) <= sqrt( aRadius+bRadius);
 
 	
-	//bool collisionX = abs(a->posX - b->posX) <= ((a->sizeX ) + (b->sizeX ));
-	//bool collisionY = abs(a->posY - b->posY) <= ((a->sizeY ) + (b->sizeY ));
-	//bool collisionZ = abs(a->posZ - b->posZ) <= ((a->sizeZ ) + (b->sizeZ ));
+	/*
+	bool collisionX = abs(a->posX - b->posX) <= ((a->sizeX ) + (b->sizeX ));
+	bool collisionY = abs(a->posY - b->posY) <= ((a->sizeY ) + (b->sizeY ));
+	bool collisionZ = abs(a->posZ - b->posZ) <= ((a->sizeZ ) + (b->sizeZ ));
+	*/
 	
 	
 	return col;
-	//return collisionX && collisionY;// &collisionZ;
+	//return collisionX && collisionY &&collisionZ;
 }
 
 gameController::~gameController()
