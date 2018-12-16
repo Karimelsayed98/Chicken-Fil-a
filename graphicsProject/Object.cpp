@@ -2,7 +2,29 @@
 
 void Object::rotateTheObject(float angle , int x, int y, int z)
 {
-	rotationVector = rotate(angle, vec3(x, y, z));
+	rotationVector *= rotate(angle, vec3(x, y, z));
+}
+
+void Object::scaleTheObject(float x , float y , float z )
+{
+
+	sizeX = x* (abs(verts[0].pos.x - verts[3].pos.x) / 2.0);
+	sizeY = y* (abs(verts[0].pos.y - verts[3].pos.y) / 2.0);
+	sizeZ = z* (abs(verts[0].pos.z - verts[3].pos.z) / 2.0);
+	posX *= sizeX ;
+	posY *= sizeY ;
+	posZ *= sizeZ ;
+	this->scaleVector *= scale(x, y, z);
+}
+
+void Object::translateTheObject(float x, float y , float z)
+{
+	this->translateVector *= translate(x, y, z);
+	posX = translateVector[3].x;
+	posY = translateVector[3].y;
+	posZ = translateVector[3].z;
+	//vec4 trans = this->translateVector*vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	cout << posX << ' ' << posY << ' ' << posZ << endl;
 }
 
 Object::Object()
@@ -11,6 +33,16 @@ Object::Object()
 
 void Object::init()
 {
+	Died = false; 
+
+	sizeX = abs(verts[0].pos.x - verts[3].pos.x) / 2.0;
+	sizeY = abs(verts[0].pos.y - verts[3].pos.y) / 2.0; 
+	sizeZ = abs(verts[0].pos.z - verts[3].pos.z) / 2.0;
+
+	posX = 0.0f;
+	posY = 0.0f;
+	posZ = 0.0f;
+
 	//VAO
 	glGenVertexArrays(1, &vertexArrayID);
 	glBindVertexArray(vertexArrayID);
@@ -42,6 +74,8 @@ void Object::init()
 
 void Object::draw(GLuint pID)
 {
+	if (Died == true)
+		return;
 	glBindVertexArray(vertexArrayID);
 	// set modelMatrix
 	GLuint modeMatrixID = glGetUniformLocation(pID,	"ModelMatrix");

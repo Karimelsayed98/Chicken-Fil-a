@@ -20,22 +20,40 @@ void gameController::init()
 	ViewMatrixID = glGetUniformLocation(programID, "ViewMatrix");
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//normalChicken = new NormalChicken ("chicken2.png");
+
+
+	for (float i = -1.0f; i <= 1.0f; i += 0.6f)
+	{
+		normalChicken = new NormalChicken("chicken2.png");
+		normalChicken->translateTheObject(i, 0.42, -1.0);
+		normalChickens.push_back(normalChicken);
+
+	}
+	normalChicken = new NormalChicken ("chicken2.png");
+	normalChickens.push_back(normalChicken);
 	//bossChicken = new BossChicken ("Bosschicken2.png");
-	c = new Cube("Bosschicken2.png");
+	ship = new Ship("ship.png");
+	//c = new Cube("Bosschicken2.png");
 	spaceFloor = new SpaceFloor("space.png");
 }
 
 void gameController::draw()
 {
+	
 	glClear(GL_COLOR_BUFFER_BIT);
 	cameraVP();
+
 	spaceFloor->draw(programID);
-	//normalChicken->draw(programID);
+	for (int i = 0; i < normalChickens.size(); i++)
+	{
+	normalChickens[i]->draw(programID);
+
+	}
+	ship->draw(programID);
 	//bossChicken->draw(programID);
 	//bossChicken->translateVector = vec3(0.5f, 0.0f, 0.0f);
 	//bossChicken->scaleVector = vec3(3.0f, 3.0f, 1.0f);
-	c->draw(programID);
+	//c->draw(programID);
 }
 
 void gameController::update()
@@ -50,7 +68,20 @@ void gameController::HandleKeyboardInput(int key)
 {
 	if (key == -1)
 		return;
-	printf("key : %d \n", key);
+	for (int i = 0; i < normalChickens.size(); i++)
+	{
+
+		if (thereIsCollision(ship, normalChickens[i]))
+		{
+			//normalChickens[i]->Died = true;
+			//normalChickens[i] = normalChickens[normalChickens.size() - 1];
+			//normalChickens.pop_back();
+			cout << i << endl;
+			//i--;
+		}
+	}
+	//printf("key : %d \n", key);
+	ship->HandleKeyboardInput(key);
 	switch (key)
 	{
 		//Moving forward
@@ -96,6 +127,38 @@ void gameController::cameraVP()
 	this->ProjectionMatrix = camera.GetProjectionMatrix();
 	glUniformMatrix4fv(ProjectionMatrixID, 1, GL_FALSE, &ProjectionMatrix[0][0]);
 	glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+}
+
+bool gameController::thereIsCollision(Object * a, Object * b)
+{
+	/*
+	bool collisionX = a->posX + a->sizeX / 2.0 >= b->posX && b->posX + b->sizeX / 2.0 >= a->posX ;
+	bool collisionY = a->posY + a->sizeY / 2.0 >= b->posY && b->posY + b->sizeY / 2.0 >= a->posY;
+	bool collisionZ = a->posZ + a->sizeZ / 2.0 >= b->posZ && b->posZ + b->sizeZ / 2.0 >= a->posZ;
+	*/
+	
+	GLfloat dx = abs(a->posX - b->posX);
+	dx *= dx;
+	GLfloat dy = abs(a->posY - b->posY);
+	dy *= dy;
+	GLfloat dz = abs(a->posZ - b->posZ);
+	dz *= dz;
+	//bool col = sqrt(dx + dz + dy) <= ((a->sizeX+b->sizeX)/2.0)+ ((a->sizeY + b->sizeY ) / 2.0) + ((a->sizeZ + b->sizeZ ) / 2.0);
+	GLfloat aRadius = (a->sizeX*a->sizeX) + (a->sizeY*a->sizeY) + (a->sizeZ*a->sizeZ);
+	GLfloat bRadius = (b->sizeX*b->sizeX) + (b->sizeY*b->sizeY) + (b->sizeZ*b->sizeZ);
+
+	bool col = sqrt(dx + dz + dy) <= sqrt( aRadius+bRadius);
+
+	
+	/*
+	bool collisionX = abs(a->posX - b->posX) <= ((a->sizeX ) + (b->sizeX ));
+	bool collisionY = abs(a->posY - b->posY) <= ((a->sizeY ) + (b->sizeY ));
+	bool collisionZ = abs(a->posZ - b->posZ) <= ((a->sizeZ ) + (b->sizeZ ));
+	*/
+	
+	
+	return col;
+	//return collisionX && collisionY &&collisionZ;
 }
 
 gameController::~gameController()
