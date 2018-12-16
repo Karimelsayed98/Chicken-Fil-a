@@ -1,5 +1,6 @@
 #include "FPCamera.h"
-
+#include <gl/glew.h>
+#include<GL\glfw3.h>
 FPCamera::FPCamera(void)
 {
 	this->Reset(0, 1.0, 3.0,
@@ -10,6 +11,48 @@ FPCamera::FPCamera(void)
 
 FPCamera::~FPCamera(void)
 {
+}
+
+bool FPCamera::HandleKeyboardInput(int key )
+{
+	switch (key)
+	{
+		//Moving forward
+	case GLFW_KEY_W:
+		
+		Walk(0.01);
+		break;
+		//Moving backword
+	case GLFW_KEY_S:
+		Walk(-0.01);
+		break;
+		// Moving right
+	case GLFW_KEY_D:
+		Strafe(0.01);
+		break;
+		// Moving left
+	case GLFW_KEY_A:
+		Strafe(-0.01);
+		break;
+		// Moving up
+	case GLFW_KEY_R:
+		Fly(0.01);
+		break;
+		// Moving down
+	case GLFW_KEY_F:
+		Fly(-0.01);
+		break;
+	case GLFW_KEY_E:
+		Yaw(0.5f);
+		break;
+	case GLFW_KEY_Q:
+		Yaw(-0.5f);
+		break;
+	default:
+		return false;
+		break;
+	}
+	return true;
 }
 
 glm::vec3 FPCamera::GetLookDirection()

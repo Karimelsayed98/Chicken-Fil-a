@@ -21,6 +21,7 @@ public:
 	void Draw();
 	void cameraVP();
 	void HandleKeyboardInput(int key);
+	void HandleMouseInput(int key);
 	void Update();
 	~Renderer();
 };
