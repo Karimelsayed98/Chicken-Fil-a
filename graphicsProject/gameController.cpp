@@ -38,7 +38,7 @@ void gameController::init()
 	//bossChicken->translateVector = vec3(0.5f, 0.0f, 0.0f);
 	//bossChicken->scaleVector = vec3(3.0f, 3.0f, 1.0f);
 	ship = new Ship("ship.png");
-	//c = new Cube("Bosschicken2.png");
+	c = new Cube("Bosschicken2.png");
 	spaceFloor = new SpaceFloor("space.png");
 }
 
@@ -132,14 +132,20 @@ void gameController::CollisionBetweenBulletAndChickens()
 		{
 			if (thereIsCollision(ShipBullets[i], normalChickens[j])) 
 			{
-				normalChickens[j]->Died = true;
-				normalChickens[j] = normalChickens[normalChickens.size() - 1];
-				normalChickens.pop_back();
-
+				normalChickens[j]->health--;
+				printf(" Current Health %d \n", normalChickens[j]->health);
+				if (normalChickens[j]->health == 0) {
+					printf("Cluck Cluck \n");
+					normalChickens[j]->Died = true;
+					normalChickens[j] = normalChickens[normalChickens.size() - 1];
+					normalChickens.pop_back();
+				}
 				ShipBullets[i]->Died = true;
 				ShipBullets[i] = ShipBullets[ShipBullets.size() - 1];
 				ShipBullets.pop_back();
 				i--;
+				if (normalChickens.size()== 0)
+					printf("WINNER WINNER CHICKEN DINNER");
 				break;
 			}
 		}
@@ -156,6 +162,7 @@ void gameController::CollisionBetweenShipAndChickens()
 			normalChickens[i] = normalChickens[normalChickens.size() - 1];
 			normalChickens.pop_back();
 			ship->Died = true;
+			printf("CHICKEN FILA LOST :(( \n");
 			break;
 		}
 	}

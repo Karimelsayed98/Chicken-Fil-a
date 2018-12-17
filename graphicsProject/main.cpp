@@ -2,8 +2,7 @@
 #include <Windows.h>
 #include <gl/glew.h>
 #include <gl/glfw3.h>
-#include "Renderer.h"
-
+#include "Renderer.h"	
 bool InitGraphics();
 
 
