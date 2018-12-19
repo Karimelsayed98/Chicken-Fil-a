@@ -124,6 +124,7 @@
   <ItemGroup>
     <ClCompile Include="BossChicken.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="FlashChicken.cpp" />
     <ClCompile Include="FPCamera.cpp" />
     <ClCompile Include="gameController.cpp" />
     <ClCompile Include="main.cpp" />
@@ -142,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="BossChicken.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="FlashChicken.h" />
     <ClInclude Include="FPCamera.h" />
     <ClInclude Include="gameController.h" />
     <ClInclude Include="NormalChicken.h" />

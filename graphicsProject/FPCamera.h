@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-
 class FPCamera
 {
 	glm::vec3 mPosition;
@@ -19,8 +18,10 @@ class FPCamera
 public:
 	FPCamera(void);
 	~FPCamera(void);
+	bool firstPesron;
 	bool HandleKeyboardInput(int);
 	void UpdateViewMatrix();
+	void UpdateFirsrtPersonViewMatrix(glm::vec3 pos);
 	glm::mat4 GetViewMatrix();
 	void SetPerspectiveProjection(float FOV, float aspectRatio, float near, float far);
 	glm::mat4 GetProjectionMatrix();

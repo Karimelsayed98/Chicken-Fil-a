@@ -18,8 +18,7 @@ bool FPCamera::HandleKeyboardInput(int key )
 	switch (key)
 	{
 		//Moving forward
-	case GLFW_KEY_W:
-		
+	case GLFW_KEY_W:	
 		Walk(0.01);
 		break;
 		//Moving backword
@@ -47,6 +46,9 @@ bool FPCamera::HandleKeyboardInput(int key )
 		break;
 	case GLFW_KEY_Q:
 		Yaw(-0.5f);
+		break;
+	case GLFW_KEY_C:
+		this->firstPesron = !this->firstPesron;
 		break;
 	default:
 		return false;
@@ -92,7 +94,15 @@ glm::mat4 FPCamera::GetViewMatrix()
 void FPCamera::UpdateViewMatrix()
 {
 	glm::vec3 center = mPosition + this->GetLookDirection();
-	mViewMatrix = glm::lookAt(mPosition,center,mUp);
+	mViewMatrix = glm::lookAt(mPosition, center, mUp);
+	this->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+}
+
+void FPCamera::UpdateFirsrtPersonViewMatrix(glm::vec3 pos)
+{
+	glm::vec3 center = pos + this->GetLookDirection();
+	mViewMatrix = glm::lookAt(pos, center, mUp);
+	this->SetPerspectiveProjection(140.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 }
 
 glm::mat4 FPCamera::GetProjectionMatrix()

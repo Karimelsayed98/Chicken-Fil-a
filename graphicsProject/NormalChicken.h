@@ -3,12 +3,13 @@
 class NormalChicken :
 	public Rect
 {
+protected:
 	bool pos;
 	GLuint nextChange;
 public:
 	NormalChicken();
 	NormalChicken(string);
-	void Update(GLfloat deltaTime);
+	virtual void Update(GLfloat deltaTime);
 	void Shoot();
 	~NormalChicken();
 };

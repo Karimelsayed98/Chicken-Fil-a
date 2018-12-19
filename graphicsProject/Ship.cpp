@@ -47,7 +47,7 @@ bool Ship::HandleKeyboardInput(int key, GLfloat deltaTime)
 		// Moving right
 	case GLFW_KEY_RIGHT:
 		if (posX +(stepX *deltaTime )<= 1.11f)
-			translateTheObject(stepX*deltaTime,0.0f, 0.0f);
+			translateTheObject(stepX*deltaTime, 0.0f, 0.0f);
 		
 		break;
 		// Moving left
