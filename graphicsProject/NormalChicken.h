@@ -1,7 +1,8 @@
 #pragma once
 #include "Rect.h"
+#include "Chickens.h"
 class NormalChicken :
-	public Rect
+	public Chickens
 {
 protected:
 	bool pos;

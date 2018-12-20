@@ -6,7 +6,7 @@ FlashChicken::FlashChicken()
 {
 }
 
-FlashChicken::FlashChicken(string tname) : NormalChicken(tname)
+FlashChicken::FlashChicken(string tname) : Chickens(tname)
 {
 	this->init();
 	pos = false;

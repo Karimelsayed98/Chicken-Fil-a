@@ -6,12 +6,15 @@ NormalChicken::NormalChicken()
 {
 }
 
-NormalChicken::NormalChicken(string textureName) : Rect (textureName)
+NormalChicken::NormalChicken(string textureName) : Chickens (textureName)
 {
+	anotherLife = true;
+	/*
 	this->init();
 	pos = false;
 	this->health = 1;
 	nextChange = 0;
+	*/
 }
 
 void NormalChicken::Update(GLfloat deltaTime)
