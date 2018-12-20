@@ -1,7 +1,7 @@
 #pragma once
-#include "NormalChicken.h"
+#include "Chickens.h"
 class FlashChicken :
-	public NormalChicken
+	public Chickens
 {
 	GLfloat stepDistance;
 public:

@@ -16,6 +16,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include "ShipBullet.h"
+#include "Chickens.h"
 class gameController
 {
 	GLuint programID;
@@ -31,14 +32,13 @@ class gameController
 	Cube* c;
 	SpaceFloor * spaceFloor;
 	Ship * ship;
-	vector <NormalChicken * > normalChickens;
+	vector <Chickens* > Enemies;
 	vector <ShipBullet * > ShipBullets;
 	int level;
 	GLfloat pastFrame;
 	GLfloat deltaTime;
 	void finishedLevel();
-	//vector <bossChicken> bosses;
-	//vector <bullet> bullets;
+	void rebirthNormalChicken(GLfloat, GLfloat, GLfloat, GLfloat);
 	//vector <egg> eggs;
 public:
 	void init();

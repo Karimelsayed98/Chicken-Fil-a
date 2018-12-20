@@ -15,24 +15,26 @@ gameController::gameController()
 
 void gameController::finishedLevel()
 {
-	if (normalChickens.size() == 0 && level == 1)
+	if (Enemies.size() == 0 && level == 1)
 	{
 		level++;
 		fChicken = new FlashChicken("flasChicken.png");
-		normalChickens.push_back(fChicken);
+		Enemies.push_back(fChicken);
 	}
-	else if (normalChickens.size() == 0 && level == 2)
+	else if (Enemies.size() == 0 && level == 2)
 	{
 		level++;
 		fChicken = new FlashChicken("flasChicken.png");
-		normalChickens.push_back(fChicken);
+		Enemies.push_back(fChicken);
 	}
-	else if (normalChickens.size() == 0 && level == 3)
+	else if (Enemies.size() == 0 && level == 3)
 	{
 		level++;
 		printf("WINNER WINNER CHICKEN DINNER");
 	}
 }
+
+
 
 void gameController::init()
 {
@@ -46,11 +48,11 @@ void gameController::init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	
-	for (float i = -1.0f; i <= 1.0f; i += 0.6f)
+	for (float i = -0.8f; i <= 0.8f; i += 0.8f)
 	{
 		normalChicken = new NormalChicken("chicken2.png");
 		normalChicken->translateTheObject(i, 0.42, -1.0);
-		normalChickens.push_back(normalChicken);
+		Enemies.push_back(normalChicken);
 
 	}
 	
@@ -89,8 +91,8 @@ void gameController::drawBullets()
 }
 void gameController::drawChickens()
 {
-	for (int i = 0; i < normalChickens.size(); i++) {
-		normalChickens[i]->draw(programID);
+	for (int i = 0; i < Enemies.size(); i++) {
+		Enemies[i]->draw(programID);
 	}
 }
 void gameController::update()
@@ -126,9 +128,9 @@ void gameController::updateShoots()
 }
 void gameController::updateChicken()
 {
-	for (int i = 0; i < normalChickens.size(); i++)
+	for (int i = 0; i < Enemies.size(); i++)
 	{
-	    	normalChickens[i]->Update(deltaTime);
+		Enemies[i]->Update(deltaTime);
 	}
 	
 }
@@ -143,6 +145,7 @@ void gameController::checkForAllCollisions()
 {
 	CollisionBetweenShipAndChickens();
 	//CollisionBetweenShipAndEgg();
+	//CollisionBetweenBulletAndEgg();
 	CollisionBetweenBulletAndChickens();
 }
 void gameController::CollisionBetweenBulletAndChickens() 
@@ -162,17 +165,28 @@ void gameController::CollisionBetweenBulletAndChickens()
 }
 bool gameController::CheckCollisionWithNormal(int index) 
 {
-	for (int i = 0; i < normalChickens.size(); i++)
+	for (int i = 0; i < Enemies.size(); i++)
 	{
-		if (thereIsCollision(ShipBullets[index], normalChickens[i]))
+		if (thereIsCollision(ShipBullets[index], Enemies[i]))
 		{
-			normalChickens[i]->health--;
-			printf(" Current Health %d \n", normalChickens[i]->health);
-			if (normalChickens[i]->health == 0) {
+			Enemies[i]->health--;
+			printf(" Current Health %d \n", Enemies[i]->health);
+			if (Enemies[i]->health == 0) {
+				if (Enemies[i]->anotherLife == true)
+				{
+					if (typeid(*Enemies[i]) == typeid(NormalChicken))
+					{
+						GLfloat tmpPosX = Enemies[i]->posX;
+						GLfloat tmpPosY = Enemies[i]->posY;
+						GLfloat tmpPosZ = Enemies[i]->posZ;
+						GLfloat tmpSizeX = Enemies[i]->sizeX;
+						rebirthNormalChicken(tmpPosX, tmpPosY, tmpPosZ, tmpSizeX);		
+					}
+				}
 				printf("Cluck Cluck \n");
-				normalChickens[i]->Died = true;
-				normalChickens[i] = normalChickens[normalChickens.size() - 1];
-				normalChickens.pop_back();
+				Enemies[i]->Died = true;
+				Enemies[i] = Enemies[Enemies.size() - 1];
+				Enemies.pop_back();
 				finishedLevel();
 			}
 			return true;
@@ -181,16 +195,30 @@ bool gameController::CheckCollisionWithNormal(int index)
 	}
 	return false;
 }
+void gameController::rebirthNormalChicken(GLfloat tmpPosX, GLfloat tmpPosY, GLfloat tmpPosZ, GLfloat tmpSizeX)
+{
+	normalChicken = new NormalChicken("chicken2.png");
+	normalChicken->scaleTheObject(0.5, 0.5, 0.5);
+	normalChicken->translateTheObject(tmpPosX + tmpSizeX, tmpPosY, tmpPosZ);
+	normalChicken->anotherLife = false;
+	Enemies.push_back(normalChicken);
+
+	normalChicken = new NormalChicken("chicken2.png");
+	normalChicken->translateTheObject(tmpPosX - tmpSizeX, tmpPosY, tmpPosZ);
+	normalChicken->scaleTheObject(0.5, 0.5, 0.5);
+	normalChicken->anotherLife = false;
+	Enemies.push_back(normalChicken);
+}
 void gameController::CollisionBetweenShipAndChickens()
 {
-	for (int i = 0; i < normalChickens.size(); i++)
+	for (int i = 0; i < Enemies.size(); i++)
 	{
 
-		if (thereIsCollision(ship, normalChickens[i]))
+		if (thereIsCollision(ship, Enemies[i]))
 		{
-			normalChickens[i]->Died = true;
-			normalChickens[i] = normalChickens[normalChickens.size() - 1];
-			normalChickens.pop_back();
+			Enemies[i]->Died = true;
+			Enemies[i] = Enemies[Enemies.size() - 1];
+			Enemies.pop_back();
 			ship->Died = true;
 			printf("CHICKEN FILA LOST :(( \n");
 			break;
@@ -248,35 +276,31 @@ void gameController::cameraVP()
 }
 
 bool gameController::thereIsCollision(Object * a, Object * b)
-{
-	/*
-	bool collisionX = a->posX + a->sizeX / 2.0 >= b->posX && b->posX + b->sizeX / 2.0 >= a->posX ;
-	bool collisionY = a->posY + a->sizeY / 2.0 >= b->posY && b->posY + b->sizeY / 2.0 >= a->posY;
-	bool collisionZ = a->posZ + a->sizeZ / 2.0 >= b->posZ && b->posZ + b->sizeZ / 2.0 >= a->posZ;
-	*/
-	
+{	
 	GLfloat dx = abs(a->posX - b->posX);
 	dx *= dx;
 	GLfloat dy = abs(a->posY - b->posY);
 	dy *= dy;
 	GLfloat dz = abs(a->posZ - b->posZ);
 	dz *= dz;
-	//bool col = sqrt(dx + dz + dy) <= ((a->sizeX+b->sizeX)/2.0)+ ((a->sizeY + b->sizeY ) / 2.0) + ((a->sizeZ + b->sizeZ ) / 2.0);
+	
 	GLfloat aRadius = (a->sizeX*a->sizeX) + (a->sizeY*a->sizeY) + (a->sizeZ*a->sizeZ);
 	GLfloat bRadius = (b->sizeX*b->sizeX) + (b->sizeY*b->sizeY) + (b->sizeZ*b->sizeZ);
+	
 
 	bool col = sqrt(dx + dz + dy) <= sqrt( aRadius+bRadius);
 	
+	
 
 	
-	/*
-	bool collisionX = abs(a->posX - b->posX) <= ((a->sizeX ) + (b->sizeX ));
+	
+	/*bool collisionX = abs(a->posX - b->posX) <= ((a->sizeX ) + (b->sizeX ));
 	bool collisionY = abs(a->posY - b->posY) <= ((a->sizeY ) + (b->sizeY ));
-	//bool collisionZ = abs(a->posZ - b->posZ) <= ((a->sizeZ ) + (b->sizeZ ));
+	bool collisionZ = abs(a->posZ - b->posZ) <= ((a->sizeZ ) + (b->sizeZ ));
 	*/
 
 	return col;
-	//return collisionX && collisionY;// &&collisionZ;
+	//return collisionX && collisionY&&collisionZ;
 }
 
 gameController::~gameController()
