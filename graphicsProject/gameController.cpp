@@ -60,7 +60,7 @@ void gameController::init()
 	//bossChicken->translateVector = vec3(0.5f, 0.0f, 0.0f);
 	//bossChicken->scaleVector = vec3(3.0f, 3.0f, 1.0f);
 	ship = new Ship("ship.png");
-	c = new Cube("Bosschicken2.png");
+	c = new Cube("white-egg.png");
 	spaceFloor = new SpaceFloor("space.png");
 	fChicken = new FlashChicken("flasChicken.png");
 }
@@ -71,12 +71,14 @@ void gameController::draw()
 	glClear(GL_COLOR_BUFFER_BIT);
 	cameraVP();
 	spaceFloor->draw(programID);
+	c->draw(programID);
+	/*
 	if (ship->Died == false) {
 		ship->draw(programID);
 		drawChickens();
 		drawBullets();
 	}
-	
+	*/
 	//drawEggs();
 
 	//bossChicken->draw(programID);
