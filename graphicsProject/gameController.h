@@ -48,6 +48,7 @@ public:
 	void update();
 	void updateShoots();
 	void updateChicken();
+	void updateBigChicken();
 	void updateShip();
 	void checkForAllCollisions();
 	void CollisionBetweenBulletAndChickens();
