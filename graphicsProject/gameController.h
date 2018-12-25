@@ -34,22 +34,25 @@ class gameController
 	Ship * ship;
 	vector <Chickens* > Enemies;
 	vector <ShipBullet * > ShipBullets;
+	vector <Cube *> eggs;
 	int level;
 	GLfloat pastFrame;
 	GLfloat deltaTime;
 	void finishedLevel();
 	void rebirthNormalChicken(GLfloat, GLfloat, GLfloat, GLfloat);
-	//vector <egg> eggs;
 public:
 	void init();
 	void draw();
 	void drawBullets();
+	void drawEggs();
 	void drawChickens();
 	void update();
 	void updateShoots();
 	void updateChicken();
 	void updateShip();
 	void checkForAllCollisions();
+	void CollisionBetweenShipAndEgg();
+	void CollisionBetweenBulletAndEgg();
 	void CollisionBetweenBulletAndChickens();
 	void CollisionBetweenShipAndChickens();
 	bool CheckCollisionWithNormal(int);

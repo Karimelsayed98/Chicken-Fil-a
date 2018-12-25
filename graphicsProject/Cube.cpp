@@ -71,6 +71,13 @@ Cube::Cube(string tName)
 		20,21,22,
 		21,22,23
 	};
+
+	posX = 0.0f;
+	posY = 0.0f; 
+	posZ = 0.0f;
+	sizeX = 0.5f;
+	sizeY = 0.5f;
+	sizeZ = 0.5f;
 	/*
 	this->verts = {
 		// upper Face
@@ -110,6 +117,7 @@ Cube::Cube(string tName)
 		this->texture = new Texture(tName, 0);
 	}
 	this->init();
+	scaleTheObject(0.25, 0.25, 0.25);
 }
 
 Vertex Cube::getVertex(vec3 p, vec3 c, vec2 uv)
