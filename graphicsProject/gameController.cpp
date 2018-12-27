@@ -56,6 +56,7 @@ void gameController::init()
 	}
 	ship = new Ship("ship.png");
 	c = new Cube("white-egg.png");
+	eggs.push_back(c);
 	spaceFloor = new SpaceFloor("space.png");
 	fChicken = new FlashChicken("flasChicken.png");
 }
@@ -66,13 +67,17 @@ void gameController::draw()
 	glClear(GL_COLOR_BUFFER_BIT);
 	cameraVP();
 	spaceFloor->draw(programID);
-	//c->draw(programID);
+
+	
 	if (ship->Died == false) {
 		ship->draw(programID);
-		//bossChicken->draw(programID);
-		drawChickens();
+		//drawChickens();
+		drawEggs();
 		drawBullets();
 	}
+	
+		
+	
 	//drawEggs();
 	//c->draw(programID);
 }
@@ -81,6 +86,13 @@ void gameController::drawBullets()
 	for (int i = 0; i < ShipBullets.size(); i++)
 	{
 		ShipBullets[i]->draw(programID);
+	}
+}
+void gameController::drawEggs()
+{
+	for (int i = 0; i < eggs.size(); i++)
+	{
+		eggs[i]->draw(programID);
 	}
 }
 void gameController::drawChickens()
@@ -145,9 +157,42 @@ void gameController::updateShip()
 void gameController::checkForAllCollisions()
 {
 	CollisionBetweenShipAndChickens();
-	//CollisionBetweenShipAndEgg();
-	//CollisionBetweenBulletAndEgg();
+	CollisionBetweenShipAndEgg();
+	CollisionBetweenBulletAndEgg();
 	CollisionBetweenBulletAndChickens();
+}
+void gameController::CollisionBetweenShipAndEgg()
+{
+	for (int i = 0; i < eggs.size() ; i++)
+	{
+		if (thereIsCollision(ship, eggs[i]))
+		{
+			cout << "LOOSE";
+			//lose();
+		}
+	}
+}
+void gameController::CollisionBetweenBulletAndEgg()
+{
+	for (int i = 0; i < ShipBullets.size(); i++)
+	{
+		for (int j = 0; j < eggs.size(); j++)
+		{
+			if (thereIsCollision(ShipBullets[i], eggs[j]) )
+			{
+				ShipBullets[i]->Died = true;
+				ShipBullets[i] = ShipBullets[ShipBullets.size() - 1];
+				ShipBullets.pop_back();
+				i--;
+				eggs[j]->Died = true;
+				eggs[j] = eggs[eggs.size() - 1];
+				eggs.pop_back();
+				break;
+			}
+		}
+
+		//checkcollisionwithboss();
+	}
 }
 void gameController::CollisionBetweenBulletAndChickens() 
 {
