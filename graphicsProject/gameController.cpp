@@ -55,8 +55,8 @@ void gameController::init()
 		Enemies.push_back(normalChicken);
 	}
 	ship = new Ship("ship.png");
-	c = new Cube("white-egg.png");
-	eggs.push_back(c);
+	//c = new Egg("white-egg.png");
+	//eggs.push_back(c);
 	spaceFloor = new SpaceFloor("space.png");
 	fChicken = new FlashChicken("flasChicken.png");
 }
@@ -71,7 +71,7 @@ void gameController::draw()
 	
 	if (ship->Died == false) {
 		ship->draw(programID);
-		//drawChickens();
+		drawChickens();
 		drawEggs();
 		drawBullets();
 	}
@@ -113,6 +113,8 @@ void gameController::update()
 		updateChicken();
 		updateShoots();
 		checkForAllCollisions();
+		ChickenShoot();
+		UpdateEggs();
 		//updateBigChicken();	
 	}
 }
@@ -141,11 +143,40 @@ void gameController::updateChicken()
 	{
 		if (typeid(*Enemies[i]) == typeid(BossChicken))
 			((BossChicken*)Enemies[i])->Update(deltaTime, vec3(ship->posX, ship->posY, ship->posZ));
-		else 
-		Enemies[i]->Update(deltaTime);
-
+		else
+			Enemies[i]->Update(deltaTime);
+		
 	}
 	
+}
+void gameController::ChickenShoot() 
+{
+	if (eggs.size() < Enemies.size())
+	{
+		int index = rand() % Enemies.size();
+		while (Enemies[index]->abletoshoot() == false) 
+		{
+			index = rand() % Enemies.size();
+		}
+		Egg* newEgg = new Egg("egg.png", Enemies[index]->posX, Enemies[index]->posY, Enemies[index]->posZ);
+		eggs.push_back(newEgg);
+	}
+
+}
+void gameController::UpdateEggs() 
+{
+	for (int i = 0; i < eggs.size(); i++) 
+	{
+		if (eggs[i]->isdead) 
+		{
+			eggs[i] = eggs[eggs.size() - 1];
+			eggs.pop_back();
+			i--;
+		}
+		else if (eggs.size() != 0)
+			eggs[i]->update(deltaTime);
+		
+	}
 }
 
 void gameController::updateShip()
@@ -167,8 +198,10 @@ void gameController::CollisionBetweenShipAndEgg()
 	{
 		if (thereIsCollision(ship, eggs[i]))
 		{
-			cout << "LOOSE";
-			//lose();
+			cout << "LOSER" << endl;
+			ship->Died = true;
+			eggs[i] = eggs[eggs.size() - 1];
+			eggs.pop_back();
 		}
 	}
 }
@@ -184,7 +217,7 @@ void gameController::CollisionBetweenBulletAndEgg()
 				ShipBullets[i] = ShipBullets[ShipBullets.size() - 1];
 				ShipBullets.pop_back();
 				i--;
-				eggs[j]->Died = true;
+				eggs[j]->isdead = true;
 				eggs[j] = eggs[eggs.size() - 1];
 				eggs.pop_back();
 				break;

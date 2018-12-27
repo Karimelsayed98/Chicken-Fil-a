@@ -19,6 +19,7 @@ NormalChicken::NormalChicken(string textureName) : Chickens (textureName)
 
 void NormalChicken::Update(GLfloat deltaTime)
 {
+	next_timetoshoot -= deltaTime;
 	GLfloat dis = 0.005f;
 	if (pos == 0 && nextChange <= 450)
 	{

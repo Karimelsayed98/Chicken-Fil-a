@@ -13,11 +13,12 @@ FlashChicken::FlashChicken(string tname) : Chickens(tname)
 	this->health = 1;
 	nextChange = 0;
 	stepDistance = 1.0f;
+	this->translateTheObject(0.0f, 0.45, -1.0);
 }
 
 void FlashChicken::Update(GLfloat deltaTime)
 {
-	
+	next_timetoshoot -= deltaTime;
 	if (pos && this->posX <= 1.11f) {
 		translateTheObject(stepDistance * deltaTime, 0.0f, 0.0f);
 		if (posX > 1.11f)

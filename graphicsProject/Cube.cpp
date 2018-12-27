@@ -5,7 +5,6 @@
 Cube::Cube()
 {
 	this->texture = NULL;
-
 }
 
 Cube::Cube(string tName)
@@ -117,9 +116,8 @@ Cube::Cube(string tName)
 		this->texture = new Texture(tName, 0);
 	}
 	this->init();
-	scaleTheObject(0.25, 0.25, 0.25);
+	scaleTheObject(0.15, 0.15, 0.15);
 }
-
 Vertex Cube::getVertex(vec3 p, vec3 c, vec2 uv)
 {
 	Vertex v;
