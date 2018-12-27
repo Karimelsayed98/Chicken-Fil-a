@@ -12,13 +12,14 @@ BossChicken::BossChicken(string textureName) : Chickens(textureName)
 	//pos = false;
 	scaleTheObject(1.5, 1.5, 1.5);
 	this->health = 5;
-
+	this->translateTheObject(0.0f, 0.45, -1.0);
 	isAttacking = false;
 	isReturning = false;
 	BeforeNextAttack = 5.0f;
 }
 void BossChicken::Update(GLfloat deltaTime)
 {
+	next_timetoshoot -= deltaTime;
 }
 vec3 BossChicken::getDistance(vec3 t)
 {

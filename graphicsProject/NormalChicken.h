@@ -6,7 +6,7 @@ class NormalChicken :
 {
 protected:
 	bool pos;
-	GLuint nextChange;
+	GLuint nextChange; 
 public:
 	NormalChicken();
 	NormalChicken(string);

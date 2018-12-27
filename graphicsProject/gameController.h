@@ -12,6 +12,7 @@
 #include "SpaceFloor.h"
 #include "Ship.h"
 #include "FlashChicken.h"
+#include "Egg.h"
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -34,7 +35,7 @@ class gameController
 	Ship * ship;
 	vector <Chickens* > Enemies;
 	vector <ShipBullet * > ShipBullets;
-	vector <Cube *> eggs;
+	vector <Egg *> eggs;
 	int level;
 	GLfloat pastFrame;
 	GLfloat deltaTime;
@@ -59,6 +60,8 @@ public:
 	bool CheckCollisionWithNormal(int);
 	void HandleKeyboardInput(int key);
 	void HandleMouseInput(int key);
+	void ChickenShoot();
+	void UpdateEggs();
 	void cameraVP();
 
 	bool thereIsCollision(Object * a, Object * b);
