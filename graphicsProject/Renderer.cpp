@@ -24,13 +24,16 @@ void Renderer::cameraVP()
 
 void Renderer::Update()
 {
-	GameController->detectCollisions();
 	GameController->update();
 }
 
 void Renderer::HandleKeyboardInput(int key)
 {
 	GameController->HandleKeyboardInput(key);
+}
+void Renderer::HandleMouseInput(int key) 
+{
+	GameController->HandleMouseInput(key);
 }
 Renderer::~Renderer()
 {

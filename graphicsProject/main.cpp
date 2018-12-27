@@ -2,8 +2,7 @@
 #include <Windows.h>
 #include <gl/glew.h>
 #include <gl/glfw3.h>
-#include "Renderer.h"
-
+#include "Renderer.h"	
 bool InitGraphics();
 
 
@@ -72,6 +71,7 @@ bool InitGraphics()
 		if (KeyPressed != -1)
 		{
 			renderer->HandleKeyboardInput(KeyPressed);
+			renderer->HandleMouseInput(KeyPressed);
 			//KeyPressed = -1;
 		}
 

@@ -6,30 +6,17 @@ ShipBullet::ShipBullet()
 {
 
 }
-ShipBullet::ShipBullet(string textureName) :Rect(textureName)
+ShipBullet::ShipBullet(string TextureName) : Rect(TextureName)
 {
 	this->init();
 	this->rotateTheObject(-70.0f, 1, 0, 0);
-	this->scaleTheObject(0.5, 0.5, 0.5);
+	this->scaleTheObject(0.3f, 0.3f, 0.3f);
+	speed = 1.0f;
 }
-void ShipBullet::HandleMouseInput(int key) 
+void ShipBullet::Update(GLfloat deltatime) 
 {
-	if (key == -1)
-		return;
-	//lw das 3al left click yeb2 ye3ml translate lel bullet
-	switch (key)
-	{
-	case GLFW_KEY_UP:
-		this->Update();
-	default:
-		return;
-	}
-}
-void ShipBullet::Update() 
-{
-	
-	if (this->posZ < 1 && this->posY<0.5)
-	translateTheObject(0.0f, 0.001f, -(0.001f*2.5f));
+	if(this->posY < 0.55f)
+	this->translateTheObject(0.0f, speed*deltatime, -(speed*2.5f*deltatime));
 }
 ShipBullet::~ShipBullet()
 {

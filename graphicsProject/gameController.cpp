@@ -9,10 +9,36 @@ void gameController::Cleanup()
 
 gameController::gameController()
 {
+	pastFrame = glfwGetTime();
+	deltaTime = 0;
 }
+
+void gameController::finishedLevel()
+{
+	if (Enemies.size() == 0 && level == 1)
+	{
+		level++;
+		fChicken = new FlashChicken("flasChicken.png");
+		Enemies.push_back(fChicken);
+	}
+	else if (Enemies.size() == 0 && level == 2)
+	{
+		level++;
+		bossChicken = new BossChicken("Bosschicken2.png");
+		Enemies.push_back(bossChicken);
+	}
+	else if (Enemies.size() == 0 && level == 3)
+	{
+		level++;
+		printf("WINNER WINNER CHICKEN DINNER");
+	}
+}
+
+
 
 void gameController::init()
 {
+	level = 1;
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	programID = LoadShaders("VertexShader.vertexshader", "FragmentShader.fragmentshader");
 	glUseProgram(programID);
@@ -21,20 +47,18 @@ void gameController::init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-	for (float i = -1.0f; i <= 1.0f; i += 0.6f)
+	
+	for (float i = -0.8f; i <= 0.8f; i += 0.8f)
 	{
 		normalChicken = new NormalChicken("chicken2.png");
 		normalChicken->translateTheObject(i, 0.42, -1.0);
-		normalChickens.push_back(normalChicken);
-
+		Enemies.push_back(normalChicken);
 	}
-	normalChicken = new NormalChicken ("chicken2.png");
-	normalChickens.push_back(normalChicken);
-	//bossChicken = new BossChicken ("Bosschicken2.png");
 	ship = new Ship("ship.png");
-	//c = new Cube("Bosschicken2.png");
+	c = new Cube("white-egg.png");
+	eggs.push_back(c);
 	spaceFloor = new SpaceFloor("space.png");
+	fChicken = new FlashChicken("flasChicken.png");
 }
 
 void gameController::draw()
@@ -42,83 +66,251 @@ void gameController::draw()
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 	cameraVP();
-
 	spaceFloor->draw(programID);
-	for (int i = 0; i < normalChickens.size(); i++)
-	{
-	normalChickens[i]->draw(programID);
 
+	
+	if (ship->Died == false) {
+		ship->draw(programID);
+		//drawChickens();
+		drawEggs();
+		drawBullets();
 	}
-	ship->draw(programID);
-	//bossChicken->draw(programID);
-	//bossChicken->translateVector = vec3(0.5f, 0.0f, 0.0f);
-	//bossChicken->scaleVector = vec3(3.0f, 3.0f, 1.0f);
+	
+		
+	
+	//drawEggs();
 	//c->draw(programID);
 }
-
+void gameController::drawBullets()
+{
+	for (int i = 0; i < ShipBullets.size(); i++)
+	{
+		ShipBullets[i]->draw(programID);
+	}
+}
+void gameController::drawEggs()
+{
+	for (int i = 0; i < eggs.size(); i++)
+	{
+		eggs[i]->draw(programID);
+	}
+}
+void gameController::drawChickens()
+{
+	for (int i = 0; i < Enemies.size(); i++) {
+		Enemies[i]->draw(programID);
+	}
+}
 void gameController::update()
 {
+	if (camera.firstPesron)
+		camera.UpdateFirsrtPersonViewMatrix(vec3(ship->posX, ship->posY, ship->posZ));
+	if (ship->Died == false) {
+		GLfloat temp = glfwGetTime();
+		deltaTime = temp - pastFrame;
+		pastFrame = temp;
+		updateShip();
+		updateChicken();
+		updateShoots();
+		checkForAllCollisions();
+		//updateBigChicken();	
+	}
+}
+void gameController::updateBigChicken()
+{
+	bossChicken->Update(deltaTime, vec3(ship->posX, ship->posY, ship->posZ));
+}
+void gameController::updateShoots()
+{
+	for (int i = 0; i < ShipBullets.size(); i++)
+	{
+		if (ShipBullets[i]->posY > 0.55f)
+		{
+			ShipBullets[i]->Died = true;
+			ShipBullets[i] = ShipBullets[ShipBullets.size() - 1];
+			ShipBullets.pop_back();
+			i--;
+		}
+		else
+			ShipBullets[i]->Update(deltaTime);
+	}
+}
+void gameController::updateChicken()
+{
+	for (int i = 0; i < Enemies.size(); i++)
+	{
+		if (typeid(*Enemies[i]) == typeid(BossChicken))
+			((BossChicken*)Enemies[i])->Update(deltaTime, vec3(ship->posX, ship->posY, ship->posZ));
+		else 
+		Enemies[i]->Update(deltaTime);
+
+	}
+	
 }
 
-void gameController::detectCollisions()
+void gameController::updateShip()
 {
+	if (ship->nextShoot > 0)
+		ship->nextShoot -= deltaTime;
 }
+
+void gameController::checkForAllCollisions()
+{
+	CollisionBetweenShipAndChickens();
+	CollisionBetweenShipAndEgg();
+	CollisionBetweenBulletAndEgg();
+	CollisionBetweenBulletAndChickens();
+}
+void gameController::CollisionBetweenShipAndEgg()
+{
+	for (int i = 0; i < eggs.size() ; i++)
+	{
+		if (thereIsCollision(ship, eggs[i]))
+		{
+			cout << "LOOSE";
+			//lose();
+		}
+	}
+}
+void gameController::CollisionBetweenBulletAndEgg()
+{
+	for (int i = 0; i < ShipBullets.size(); i++)
+	{
+		for (int j = 0; j < eggs.size(); j++)
+		{
+			if (thereIsCollision(ShipBullets[i], eggs[j]) )
+			{
+				ShipBullets[i]->Died = true;
+				ShipBullets[i] = ShipBullets[ShipBullets.size() - 1];
+				ShipBullets.pop_back();
+				i--;
+				eggs[j]->Died = true;
+				eggs[j] = eggs[eggs.size() - 1];
+				eggs.pop_back();
+				break;
+			}
+		}
+
+		//checkcollisionwithboss();
+	}
+}
+void gameController::CollisionBetweenBulletAndChickens() 
+{
+	for (int i = 0; i < ShipBullets.size(); i++) 
+	{
+		if (CheckCollisionWithNormal(i))
+		{
+			ShipBullets[i]->Died = true;
+			ShipBullets[i] = ShipBullets[ShipBullets.size() - 1];
+			ShipBullets.pop_back();
+			i--;
+		}
+
+		//checkcollisionwithboss();
+	}
+}
+bool gameController::CheckCollisionWithNormal(int index) 
+{
+	for (int i = 0; i < Enemies.size(); i++)
+	{
+		if (thereIsCollision(ShipBullets[index], Enemies[i]))
+		{
+			Enemies[i]->health--;
+			printf(" Current Health %d \n", Enemies[i]->health);
+			if (Enemies[i]->health == 0) {
+				if (Enemies[i]->anotherLife == true)
+				{
+					if (typeid(*Enemies[i]) == typeid(NormalChicken))
+					{
+						GLfloat tmpPosX = Enemies[i]->posX;
+						GLfloat tmpPosY = Enemies[i]->posY;
+						GLfloat tmpPosZ = Enemies[i]->posZ;
+						GLfloat tmpSizeX = Enemies[i]->sizeX;
+						rebirthNormalChicken(tmpPosX, tmpPosY, tmpPosZ, tmpSizeX);		
+					}
+				}
+				printf("Cluck Cluck \n");
+				Enemies[i]->Died = true;
+				Enemies[i] = Enemies[Enemies.size() - 1];
+				Enemies.pop_back();
+				finishedLevel();
+			}
+			return true;
+		}
+
+	}
+	return false;
+}
+void gameController::rebirthNormalChicken(GLfloat tmpPosX, GLfloat tmpPosY, GLfloat tmpPosZ, GLfloat tmpSizeX)
+{
+	normalChicken = new NormalChicken("chicken2.png");
+	normalChicken->scaleTheObject(0.5, 0.5, 0.5);
+	normalChicken->translateTheObject(tmpPosX + tmpSizeX, tmpPosY, tmpPosZ);
+	normalChicken->anotherLife = false;
+	Enemies.push_back(normalChicken);
+
+	normalChicken = new NormalChicken("chicken2.png");
+	normalChicken->translateTheObject(tmpPosX - tmpSizeX, tmpPosY, tmpPosZ);
+	normalChicken->scaleTheObject(0.5, 0.5, 0.5);
+	normalChicken->anotherLife = false;
+	Enemies.push_back(normalChicken);
+}
+void gameController::CollisionBetweenShipAndChickens()
+{
+	for (int i = 0; i < Enemies.size(); i++)
+	{
+
+		if (thereIsCollision(ship, Enemies[i]))
+		{
+			Enemies[i]->Died = true;
+			Enemies[i] = Enemies[Enemies.size() - 1];
+			Enemies.pop_back();
+			ship->Died = true;
+			printf("CHICKEN FILA LOST :(( \n");
+			break;
+		}
+	}
+	
+}
+
 
 void gameController::HandleKeyboardInput(int key)
 {
 	if (key == -1)
 		return;
-	for (int i = 0; i < normalChickens.size(); i++)
+	
+	if (ship->HandleKeyboardInput(key , deltaTime))
 	{
-
-		if (thereIsCollision(ship, normalChickens[i]))
-		{
-			//normalChickens[i]->Died = true;
-			//normalChickens[i] = normalChickens[normalChickens.size() - 1];
-			//normalChickens.pop_back();
-			cout << i << endl;
-			//i--;
-		}
+		return;
 	}
-	//printf("key : %d \n", key);
-	ship->HandleKeyboardInput(key);
+	else if (camera.HandleKeyboardInput(key))
+	{
+		if (camera.firstPesron)
+			camera.UpdateFirsrtPersonViewMatrix(vec3(ship->posX, ship->posY, ship->posZ));
+		else
+			camera.UpdateViewMatrix();
+		return;
+	}
+	//continue the remaining movements.
+	
+}
+void gameController::HandleMouseInput(int key) 
+{
+	ShipBullet* tempBullet;
 	switch (key)
 	{
-		//Moving forward
-	case GLFW_KEY_W:
-		camera.Walk(0.01);
-		break;
-		//Moving backword
-	case GLFW_KEY_S:
-		camera.Walk(-0.01);
-		break;
-		// Moving right
-	case GLFW_KEY_D:
-		camera.Strafe(0.01);
-		break;
-		// Moving left
-	case GLFW_KEY_A:
-		camera.Strafe(-0.01);
-		break;
-		// Moving up
-	case GLFW_KEY_R:
-		camera.Fly(0.01);
-		break;
-		// Moving down
-	case GLFW_KEY_F:
-		camera.Fly(-0.01);
-		break;
-	case GLFW_KEY_E:
-		camera.Yaw(0.5f);
-		break;
-	case GLFW_KEY_Q:
-		camera.Yaw(-0.5f);
+	case GLFW_KEY_SPACE:
+		if (ship->nextShoot <= 0)
+		{
+			ship->nextShoot = ship->timeBetweenShoots;
+		tempBullet = new ShipBullet("Ship_Bullet.png");
+		tempBullet->translateTheObject(ship->posX, (ship->posY + ship->sizeY), (ship->posZ + ship->sizeZ));
+		ShipBullets.push_back(tempBullet);
+		}
 		break;
 	default:
 		break;
 	}
-	//continue the remaining movements.
-	camera.UpdateViewMatrix();
 }
 
 void gameController::cameraVP()
@@ -130,35 +322,31 @@ void gameController::cameraVP()
 }
 
 bool gameController::thereIsCollision(Object * a, Object * b)
-{
-	/*
-	bool collisionX = a->posX + a->sizeX / 2.0 >= b->posX && b->posX + b->sizeX / 2.0 >= a->posX ;
-	bool collisionY = a->posY + a->sizeY / 2.0 >= b->posY && b->posY + b->sizeY / 2.0 >= a->posY;
-	bool collisionZ = a->posZ + a->sizeZ / 2.0 >= b->posZ && b->posZ + b->sizeZ / 2.0 >= a->posZ;
-	*/
-	
+{	
 	GLfloat dx = abs(a->posX - b->posX);
 	dx *= dx;
 	GLfloat dy = abs(a->posY - b->posY);
 	dy *= dy;
 	GLfloat dz = abs(a->posZ - b->posZ);
 	dz *= dz;
-	//bool col = sqrt(dx + dz + dy) <= ((a->sizeX+b->sizeX)/2.0)+ ((a->sizeY + b->sizeY ) / 2.0) + ((a->sizeZ + b->sizeZ ) / 2.0);
+	
 	GLfloat aRadius = (a->sizeX*a->sizeX) + (a->sizeY*a->sizeY) + (a->sizeZ*a->sizeZ);
 	GLfloat bRadius = (b->sizeX*b->sizeX) + (b->sizeY*b->sizeY) + (b->sizeZ*b->sizeZ);
+	
 
 	bool col = sqrt(dx + dz + dy) <= sqrt( aRadius+bRadius);
+	
+	
 
 	
-	/*
-	bool collisionX = abs(a->posX - b->posX) <= ((a->sizeX ) + (b->sizeX ));
+	
+	/*bool collisionX = abs(a->posX - b->posX) <= ((a->sizeX ) + (b->sizeX ));
 	bool collisionY = abs(a->posY - b->posY) <= ((a->sizeY ) + (b->sizeY ));
 	bool collisionZ = abs(a->posZ - b->posZ) <= ((a->sizeZ ) + (b->sizeZ ));
 	*/
-	
-	
+
 	return col;
-	//return collisionX && collisionY &&collisionZ;
+	//return collisionX && collisionY&&collisionZ;
 }
 
 gameController::~gameController()

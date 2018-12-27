@@ -4,9 +4,15 @@ class Ship :
 	public Rect
 {
 public:
+	GLfloat nextShoot;
+	GLfloat timeBetweenShoots;
+	GLfloat stepDistance;
+	GLfloat stepX ;
+	GLfloat stepY ;
+	GLfloat stepZ ;
 	Ship();
 	Ship(string textureName);
-	void HandleKeyboardInput(int key);
+	bool HandleKeyboardInput(int key , GLfloat deltaTime);
 	~Ship();
 };
 

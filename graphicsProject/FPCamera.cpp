@@ -1,5 +1,6 @@
 #include "FPCamera.h"
-
+#include <gl/glew.h>
+#include<GL\glfw3.h>
 FPCamera::FPCamera(void)
 {
 	this->Reset(0, 1.0, 3.0,
@@ -10,6 +11,50 @@ FPCamera::FPCamera(void)
 
 FPCamera::~FPCamera(void)
 {
+}
+
+bool FPCamera::HandleKeyboardInput(int key )
+{
+	switch (key)
+	{
+		//Moving forward
+	case GLFW_KEY_W:	
+		Walk(0.01);
+		break;
+		//Moving backword
+	case GLFW_KEY_S:
+		Walk(-0.01);
+		break;
+		// Moving right
+	case GLFW_KEY_D:
+		Strafe(0.01);
+		break;
+		// Moving left
+	case GLFW_KEY_A:
+		Strafe(-0.01);
+		break;
+		// Moving up
+	case GLFW_KEY_R:
+		Fly(0.01);
+		break;
+		// Moving down
+	case GLFW_KEY_F:
+		Fly(-0.01);
+		break;
+	case GLFW_KEY_E:
+		Yaw(0.5f);
+		break;
+	case GLFW_KEY_Q:
+		Yaw(-0.5f);
+		break;
+	case GLFW_KEY_C:
+		this->firstPesron = !this->firstPesron;
+		break;
+	default:
+		return false;
+		break;
+	}
+	return true;
 }
 
 glm::vec3 FPCamera::GetLookDirection()
@@ -49,7 +94,18 @@ glm::mat4 FPCamera::GetViewMatrix()
 void FPCamera::UpdateViewMatrix()
 {
 	glm::vec3 center = mPosition + this->GetLookDirection();
-	mViewMatrix = glm::lookAt(mPosition,center,mUp);
+	mViewMatrix = glm::lookAt(mPosition, center, mUp);
+	this->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+}
+
+void FPCamera::UpdateFirsrtPersonViewMatrix(glm::vec3 pos)
+{
+	this->Reset(0, 1.0, 3.0,
+		0, 0, 0,
+		0, 1, 0);
+	glm::vec3 center = pos + this->GetLookDirection();
+	mViewMatrix = glm::lookAt(pos, center, mUp);
+	this->SetPerspectiveProjection(140.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 }
 
 glm::mat4 FPCamera::GetProjectionMatrix()

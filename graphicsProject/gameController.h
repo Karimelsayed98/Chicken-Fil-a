@@ -11,10 +11,12 @@
 #include "Cube.h"
 #include "SpaceFloor.h"
 #include "Ship.h"
+#include "FlashChicken.h"
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-
+#include "ShipBullet.h"
+#include "Chickens.h"
 class gameController
 {
 	GLuint programID;
@@ -25,20 +27,38 @@ class gameController
 	glm::mat4 ViewMatrix;
 	FPCamera camera;
 	NormalChicken* normalChicken;
+	FlashChicken* fChicken;
 	BossChicken* bossChicken;
 	Cube* c;
 	SpaceFloor * spaceFloor;
 	Ship * ship;
-	vector <NormalChicken * > normalChickens;
-	//vector <bossChicken> bosses;
-	//vector <bullet> bullets;
-	//vector <egg> eggs;
+	vector <Chickens* > Enemies;
+	vector <ShipBullet * > ShipBullets;
+	vector <Cube *> eggs;
+	int level;
+	GLfloat pastFrame;
+	GLfloat deltaTime;
+	void finishedLevel();
+	void rebirthNormalChicken(GLfloat, GLfloat, GLfloat, GLfloat);
 public:
 	void init();
 	void draw();
+	void drawBullets();
+	void drawEggs();
+	void drawChickens();
 	void update();
-	void detectCollisions();
+	void updateShoots();
+	void updateChicken();
+	void updateBigChicken();
+	void updateShip();
+	void checkForAllCollisions();
+	void CollisionBetweenShipAndEgg();
+	void CollisionBetweenBulletAndEgg();
+	void CollisionBetweenBulletAndChickens();
+	void CollisionBetweenShipAndChickens();
+	bool CheckCollisionWithNormal(int);
 	void HandleKeyboardInput(int key);
+	void HandleMouseInput(int key);
 	void cameraVP();
 
 	bool thereIsCollision(Object * a, Object * b);

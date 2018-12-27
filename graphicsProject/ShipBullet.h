@@ -1,13 +1,13 @@
 #pragma once
-#include"Rect.h"
+#include "Rect.h"
 class ShipBullet :
 	public Rect
 {
 public:
+	GLfloat speed;
 	ShipBullet();
 	ShipBullet(string);
-	void HandleMouseInput(int key);
-	void Update();
+	void Update(GLfloat);
 	~ShipBullet();
 };
 

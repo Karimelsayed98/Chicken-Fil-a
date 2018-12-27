@@ -35,6 +35,7 @@ protected:
 	glm::vec3 lightPosition;
 public:
 	bool Died;
+	int health;
 
 	GLfloat sizeX;
 	GLfloat sizeY;

@@ -10,6 +10,75 @@ Cube::Cube()
 
 Cube::Cube(string tName)
 {
+	vec3 v1 = vec3(-0.25f, 0.25f, -0.25f);
+	vec3 v2 = vec3( 0.25f, 0.25f, -0.25f);
+	vec3 v3 = vec3( 0.25f, 0.25f,  0.25f);
+	vec3 v4 = vec3(-0.25f, 0.25f,  0.25f);
+
+	vec3 v5 = vec3(-0.25f, -0.25f, -0.25f);
+	vec3 v6 = vec3(0.25f, -0.25f, -0.25f);
+	vec3 v7 = vec3(0.25f, -0.25f, 0.25f);
+	vec3 v8 = vec3(-0.25f, -0.25f, 0.25f);
+	this->verts = {
+		//upper face
+		getVertex(v1, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
+		getVertex(v2, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)),
+		getVertex(v4, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)),
+		getVertex(v3, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)),
+		//right face
+		getVertex(v2, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
+		getVertex(v3, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)),
+		getVertex(v6, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)),
+		getVertex(v7, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)),
+		//left face
+		getVertex(v1, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
+		getVertex(v5, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)),
+		getVertex(v4, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)),
+		getVertex(v8, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)),
+		//back face
+		getVertex(v1, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
+		getVertex(v5, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)),
+		getVertex(v2, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)),
+		getVertex(v6, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)),
+		//front face
+		getVertex(v4, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
+		getVertex(v8, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)),
+		getVertex(v3, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)),
+		getVertex(v7, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)),
+		//bottom face
+		getVertex(v5, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
+		getVertex(v6, vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)),
+		getVertex(v8, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)),
+		getVertex(v7, vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)),
+	};
+
+	this->indices = {
+		0,1,2,
+		1,2,3,
+
+		4,5,6,
+		5,6,7,
+
+		8,9,10,
+		9,10,11,
+
+		12,13,14,
+		13,14,15,
+
+		16,17,18,
+		17,18,19,
+
+		20,21,22,
+		21,22,23
+	};
+
+	posX = 0.0f;
+	posY = 0.0f; 
+	posZ = 0.0f;
+	sizeX = 0.5f;
+	sizeY = 0.5f;
+	sizeZ = 0.5f;
+	/*
 	this->verts = {
 		// upper Face
 		getVertex(vec3(-0.5f, 0.5f, 0.5f), vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)),
@@ -43,10 +112,12 @@ Cube::Cube(string tName)
 		4, 6, 2,
 	};
 	
+	*/
 	if (tName != "") {
 		this->texture = new Texture(tName, 0);
 	}
 	this->init();
+	scaleTheObject(0.25, 0.25, 0.25);
 }
 
 Vertex Cube::getVertex(vec3 p, vec3 c, vec2 uv)
