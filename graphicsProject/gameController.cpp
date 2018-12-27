@@ -127,7 +127,7 @@ void gameController::updateChicken()
 {
 	for (int i = 0; i < Enemies.size(); i++)
 	{
-		if (level==3)
+		if (typeid(*Enemies[i]) == typeid(BossChicken))
 			((BossChicken*)Enemies[i])->Update(deltaTime, vec3(ship->posX, ship->posY, ship->posZ));
 		else 
 		Enemies[i]->Update(deltaTime);
