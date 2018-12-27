@@ -100,6 +100,9 @@ void FPCamera::UpdateViewMatrix()
 
 void FPCamera::UpdateFirsrtPersonViewMatrix(glm::vec3 pos)
 {
+	this->Reset(0, 1.0, 3.0,
+		0, 0, 0,
+		0, 1, 0);
 	glm::vec3 center = pos + this->GetLookDirection();
 	mViewMatrix = glm::lookAt(pos, center, mUp);
 	this->SetPerspectiveProjection(140.0f, 4.0f / 3.0f, 0.1f, 100.0f);

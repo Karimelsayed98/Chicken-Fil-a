@@ -24,8 +24,8 @@ void gameController::finishedLevel()
 	else if (Enemies.size() == 0 && level == 2)
 	{
 		level++;
-		fChicken = new FlashChicken("flasChicken.png");
-		Enemies.push_back(fChicken);
+		bossChicken = new BossChicken("Bosschicken2.png");
+		Enemies.push_back(bossChicken);
 	}
 	else if (Enemies.size() == 0 && level == 3)
 	{
@@ -53,12 +53,7 @@ void gameController::init()
 		normalChicken = new NormalChicken("chicken2.png");
 		normalChicken->translateTheObject(i, 0.42, -1.0);
 		Enemies.push_back(normalChicken);
-
 	}
-	
-	//bossChicken = new BossChicken ("Bosschicken2.png");
-	//bossChicken->translateVector = vec3(0.5f, 0.0f, 0.0f);
-	//bossChicken->scaleVector = vec3(3.0f, 3.0f, 1.0f);
 	ship = new Ship("ship.png");
 	c = new Cube("white-egg.png");
 	eggs.push_back(c);
@@ -72,6 +67,7 @@ void gameController::draw()
 	glClear(GL_COLOR_BUFFER_BIT);
 	cameraVP();
 	spaceFloor->draw(programID);
+
 	
 	if (ship->Died == false) {
 		ship->draw(programID);
@@ -80,9 +76,9 @@ void gameController::draw()
 		drawBullets();
 	}
 	
+		
+	
 	//drawEggs();
-
-	//bossChicken->draw(programID);
 	//c->draw(programID);
 }
 void gameController::drawBullets()
@@ -117,9 +113,12 @@ void gameController::update()
 		updateChicken();
 		updateShoots();
 		checkForAllCollisions();
-		
+		//updateBigChicken();	
 	}
-
+}
+void gameController::updateBigChicken()
+{
+	bossChicken->Update(deltaTime, vec3(ship->posX, ship->posY, ship->posZ));
 }
 void gameController::updateShoots()
 {
@@ -140,7 +139,11 @@ void gameController::updateChicken()
 {
 	for (int i = 0; i < Enemies.size(); i++)
 	{
+		if (typeid(*Enemies[i]) == typeid(BossChicken))
+			((BossChicken*)Enemies[i])->Update(deltaTime, vec3(ship->posX, ship->posY, ship->posZ));
+		else 
 		Enemies[i]->Update(deltaTime);
+
 	}
 	
 }
