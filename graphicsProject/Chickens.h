@@ -7,9 +7,9 @@ class Chickens :
 protected:
 	bool pos;
 	GLuint nextChange;
+public:
 	GLfloat timebetweenshoot;
 	GLfloat next_timetoshoot;
-public:
 	bool anotherLife;
 	Chickens();
 	Chickens(string);

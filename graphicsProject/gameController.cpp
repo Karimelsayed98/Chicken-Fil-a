@@ -58,7 +58,7 @@ void gameController::init()
 	//c = new Egg("white-egg.png");
 	//eggs.push_back(c);
 	spaceFloor = new SpaceFloor("space.png");
-	fChicken = new FlashChicken("flasChicken.png");
+	//fChicken = new FlashChicken("flasChicken.png");
 }
 
 void gameController::draw()
@@ -151,13 +151,22 @@ void gameController::updateChicken()
 }
 void gameController::ChickenShoot() 
 {
+	
 	if (eggs.size() < Enemies.size())
 	{
+		int c = 1;
 		int index = rand() % Enemies.size();
-		while (Enemies[index]->abletoshoot() == false) 
+		if (Enemies[index]->abletoshoot() == false)
+			return;
+		/*while (c<= Enemies.size()*2 && Enemies[index]->abletoshoot() == false) 
 		{
+			c++;
 			index = rand() % Enemies.size();
-		}
+		}*/
+		if (c > Enemies.size() * 2)
+			return;
+		Enemies[index]->next_timetoshoot = Enemies[index]->timebetweenshoot;
+		cout << index << " next attack should be after " << Enemies[index]->next_timetoshoot << endl;
 		Egg* newEgg = new Egg("egg.png", Enemies[index]->posX, Enemies[index]->posY, Enemies[index]->posZ);
 		eggs.push_back(newEgg);
 	}
@@ -172,8 +181,9 @@ void gameController::UpdateEggs()
 			eggs[i] = eggs[eggs.size() - 1];
 			eggs.pop_back();
 			i--;
+			continue;
 		}
-		else if (eggs.size() != 0)
+		if (eggs.size() != 0)
 			eggs[i]->update(deltaTime);
 		
 	}

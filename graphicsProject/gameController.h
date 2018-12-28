@@ -32,7 +32,6 @@ class gameController
 	BossChicken* bossChicken;
 	Cube* c;
 	SpaceFloor * spaceFloor;
-	Ship * ship;
 	vector <Chickens* > Enemies;
 	vector <ShipBullet * > ShipBullets;
 	vector <Egg *> eggs;
@@ -42,6 +41,7 @@ class gameController
 	void finishedLevel();
 	void rebirthNormalChicken(GLfloat, GLfloat, GLfloat, GLfloat);
 public:
+	static Ship * ship;
 	void init();
 	void draw();
 	void drawBullets();

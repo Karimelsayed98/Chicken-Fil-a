@@ -65,7 +65,9 @@ bool InitGraphics()
 	// ******************** Initialize OpenGL ******************** //
 	renderer->Initialize();
 
-	do { // Loop
+	do {
+		
+		// Loop
 		renderer->Draw();
 		renderer->Update();
 		if (KeyPressed != -1)

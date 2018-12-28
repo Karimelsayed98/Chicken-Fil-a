@@ -13,8 +13,8 @@
 #include "gameController.h"
 class Renderer
 {
-	gameController * GameController = new gameController();
 public:
+	gameController * GameController = new gameController();
 	Renderer();
 
 	void Initialize();
