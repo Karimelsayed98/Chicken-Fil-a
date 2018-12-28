@@ -43,7 +43,7 @@ class gameController
 	void finishedLevel();
 	void rebirthNormalChicken(GLfloat, GLfloat, GLfloat, GLfloat);
 public:
-	static Ship * ship;
+	Ship * ship;
 	void init();
 	void draw();
 	void drawBullets();
