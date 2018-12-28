@@ -33,9 +33,6 @@ void gameController::finishedLevel()
 		printf("WINNER WINNER CHICKEN DINNER");
 	}
 }
-
-
-
 void gameController::init()
 {
 	level = 1;
@@ -46,8 +43,7 @@ void gameController::init()
 	ViewMatrixID = glGetUniformLocation(programID, "ViewMatrix");
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	
+	PlaySound(TEXT("audio.wav"), NULL, SND_ASYNC);
 	for (float i = -0.8f; i <= 0.8f; i += 0.8f)
 	{
 		normalChicken = new NormalChicken("chicken2.png");

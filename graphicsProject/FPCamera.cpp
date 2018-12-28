@@ -13,7 +13,7 @@ FPCamera::~FPCamera(void)
 {
 }
 
-bool FPCamera::HandleKeyboardInput(int key )
+bool FPCamera::HandleKeyboardInput(int key)
 {
 	switch (key)
 	{
@@ -93,6 +93,7 @@ glm::mat4 FPCamera::GetViewMatrix()
 
 void FPCamera::UpdateViewMatrix()
 {
+								   // mDirection
 	glm::vec3 center = mPosition + this->GetLookDirection();
 	mViewMatrix = glm::lookAt(mPosition, center, mUp);
 	this->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);

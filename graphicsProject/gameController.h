@@ -1,6 +1,8 @@
 #pragma once
 #include <gl/glew.h>
 #include<vector>
+#include <windows.h>
+#include<mmsystem.h>
 #include "shader.hpp"
 #include "Shader.h"
 #include "texture.h"
