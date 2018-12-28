@@ -12,8 +12,10 @@ Chickens::Chickens(string textureName) : Rect(textureName)
 	pos = false;
 	this->health = 1;
 	nextChange = 0;
-	timebetweenshoot = 15.0f;
-	next_timetoshoot = rand()% int(timebetweenshoot);
+	srand(glfwGetTime()*100000);
+	timebetweenshoot = rand() %20;
+	next_timetoshoot = (rand()% int(timebetweenshoot) );
+	cout << next_timetoshoot << endl;
 }
 
 void Chickens::Update(GLfloat deltaTime)
@@ -22,12 +24,11 @@ void Chickens::Update(GLfloat deltaTime)
 }
 bool Chickens::abletoshoot() 
 {
-	if (next_timetoshoot <= 0.0f) 
+	if (next_timetoshoot <= 0.0f)
 	{
-		next_timetoshoot = timebetweenshoot;
 		return true;
 	}
-
+	return false;
 }
 void Chickens::shoot(Cube* newEgg) 
 {
